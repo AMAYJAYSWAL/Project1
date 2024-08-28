@@ -4,6 +4,8 @@ import { Stack } from "expo-router";
 import { Text } from "react-native";
 import LoginScreen from './../components/LoginScreen'
 import * as SecureStore from 'expo-secure-store'
+import LocationContext from './../context/Location'
+import { useState } from "react";
 
 const tokenCache={
   async getToken(key){
@@ -31,15 +33,19 @@ export default function RootLayout() {
     'Bodoni-ExtraBold': require('./../assets/fonts/ExtraBold.ttf')
 
   })
+
+  const [locationData,setLocationData]=useState([])
   return (
     <ClerkProvider tokenCache={tokenCache} publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <SignedIn>
+        <LocationContext.Provider value={{locationData,setLocationData}}>
         <Stack screenOptions={{
         headerShown:false
         }}>
         <Stack.Screen name="(tabs)" />
 
         </Stack>
+        </LocationContext.Provider>
       </SignedIn>
 
       <SignedOut>
